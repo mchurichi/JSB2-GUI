@@ -15,7 +15,8 @@
     ".ui", 
     ".css", 
     ".json", 
-    ".ini"
+    ".ini", 
+    ".jsb2"
   ], 
   "project-type": "", 
   "postExecScript": "", 

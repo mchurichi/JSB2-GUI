@@ -24,7 +24,7 @@
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
           <widget class="QTreeWidget" name="treeJSB">
@@ -71,216 +71,23 @@
              </font>
             </property>
            </column>
-           <item>
-            <property name="text">
-             <string>projectName</string>
-            </property>
-            <property name="text">
-             <string>SmartGestion</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>deployDir</string>
-            </property>
-            <property name="text">
-             <string>/var/www/public</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>licenseText</string>
-            </property>
-            <property name="text">
-             <string>Copyright SmartSoftware Argentina 2012</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>pkgs</string>
-            </property>
-            <property name="text">
-             <string>[2 packages]</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>all (name)</string>
-             </property>
-             <property name="text">
-              <string>[2 files]</string>
-             </property>
-             <item>
-              <property name="text">
-               <string>name</string>
-              </property>
-              <property name="text">
-               <string>all</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>file</string>
-              </property>
-              <property name="text">
-               <string>all.js</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>isDebug</string>
-              </property>
-              <property name="text">
-               <string>yes</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>fileIncludes</string>
-              </property>
-              <property name="text">
-               <string>[2 files]</string>
-              </property>
-              <item>
-               <property name="text">
-                <string>ext-core.js (text)</string>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-               <item>
-                <property name="text">
-                 <string>text</string>
-                </property>
-                <property name="text">
-                 <string>ext-core.js</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>path</string>
-                </property>
-                <property name="text">
-                 <string>public/js/ext/</string>
-                </property>
-               </item>
-              </item>
-              <item>
-               <property name="text">
-                <string>ext-all-debug.js (text)</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>text</string>
-                </property>
-                <property name="text">
-                 <string>ext-all-debug.js</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>path</string>
-                </property>
-                <property name="text">
-                 <string>public/js/ext/</string>
-                </property>
-               </item>
-              </item>
-             </item>
-            </item>
-            <item>
-             <property name="text">
-              <string>grid (name)</string>
-             </property>
-             <property name="text">
-              <string>[1 file]</string>
-             </property>
-             <item>
-              <property name="text">
-               <string>name</string>
-              </property>
-              <property name="text">
-               <string>grid</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>file</string>
-              </property>
-              <property name="text">
-               <string>grid.js</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>isDebug</string>
-              </property>
-              <property name="text">
-               <string>yes</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>fileIncludes</string>
-              </property>
-              <property name="text">
-               <string>[1 file]</string>
-              </property>
-              <item>
-               <property name="text">
-                <string>grid.js (text)</string>
-               </property>
-               <item>
-                <property name="text">
-                 <string>text</string>
-                </property>
-                <property name="text">
-                 <string>grid.js</string>
-                </property>
-               </item>
-               <item>
-                <property name="text">
-                 <string>path</string>
-                </property>
-                <property name="text">
-                 <string>public/js/</string>
-                </property>
-               </item>
-              </item>
-             </item>
-            </item>
-           </item>
-           <item>
-            <property name="text">
-             <string>resources</string>
-            </property>
-            <property name="text">
-             <string>[1 resource]</string>
-            </property>
-            <item>
-             <property name="text">
-              <string>src (name)</string>
-             </property>
-             <item>
-              <property name="text">
-               <string>src</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>dest</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>filters</string>
-              </property>
-             </item>
-            </item>
-           </item>
           </widget>
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item>
             <widget class="QPushButton" name="btnAdd">
              <property name="text">
@@ -305,42 +112,15 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <layout class="QFormLayout" name="formLayout">
          <property name="fieldGrowthPolicy">
           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
          </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="lineEdit"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_2"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </widget>
       </widget>
-      <widget class="QPlainTextEdit" name="plainTextEdit">
+      <widget class="QPlainTextEdit" name="textConsole">
        <property name="baseSize">
         <size>
          <width>0</width>
@@ -349,15 +129,12 @@
        </property>
        <property name="font">
         <font>
-         <family>Consolas</family>
+         <family>Courier New</family>
          <pointsize>9</pointsize>
         </font>
        </property>
        <property name="readOnly">
         <bool>true</bool>
-       </property>
-       <property name="plainText">
-        <string/>
        </property>
       </widget>
      </widget>
@@ -370,7 +147,7 @@
      <x>0</x>
      <y>0</y>
      <width>919</width>
-     <height>21</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
