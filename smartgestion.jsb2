@@ -1,0 +1,56 @@
+{
+    "projectName": "SmartSoftware SmartGestion",
+    "deployDir": "jsbuilderborrar",
+    "licenseText": "SmartSoftware SmartGestion\nCopyright(c) 2009-2012 SmartSoftware Argentina\nhttp://www.smartsoftware.com.ar",
+    "pkgs": [{
+        "name": "SmartGestion",
+        "file": "all.js",
+        "isDebug": true,
+        "fileIncludes": [{
+            "text": "Ext-more.js",
+            "path": "src/core/"
+        },{
+            "text": "ext-base-dom-more.js",
+            "path": "src/adapter/"
+        },{
+            "text": "Cookies.js",
+            "path": "src/util/"
+        },{
+            "text": "Error.js",
+            "path": "src/core/"
+        }]
+    }],
+    "resources": [{
+        "src": "src/",
+        "dest": "src/",
+        "filters": ".*\\.js"
+    },{
+        "src": "examples/",
+        "dest": "examples/",
+        "filters": ".*[\\.html|\\.jpg|\\.png|\\.gif|\\.css|\\.js|\\.php]"
+    },{
+        "src": "test/",
+        "dest": "test/",
+        "filters": ".*[\\.js]"
+    },{
+        "src": "welcome/",
+        "dest": "welcome/",
+        "filters": ".*"
+    },{
+        "src": "index.html",
+        "dest": "index.html",
+        "filters": ".*"
+    },{
+        "src": "resources/",
+        "dest": "resources/",
+        "filters": ".*"
+    },{
+        "src": "INCLUDE_ORDER.txt",
+        "dest": "INCLUDE_ORDER.txt",
+        "filters": ".*"
+    },{
+        "src": "ext.jsb2",
+        "dest": "ext.jsb2",
+        "filters": ".*"
+    }]
+}
