@@ -3,7 +3,7 @@
 
 import sys
 import json
-from PyQt4.QtCore import QObject, SIGNAL, pyqtSlot
+from PyQt4.QtCore import pyqtSlot
 from PyQt4.QtGui import QApplication, QMainWindow, QWidget, QTreeWidgetItem, \
     QFileDialog, QFormLayout, QLineEdit, QLabel
 from PyQt4.QtCore import Qt
@@ -16,26 +16,58 @@ class JSB2_GUI(QMainWindow):
         QWidget.__init__(self, parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        QObject.connect(self.ui.treeJSB, \
-            SIGNAL('itemSelectionChanged()'), self.selected)
+        self.ui.treeJSB.itemSelectionChanged.connect(self.selected)
 
     def selected(self):
         selected = self.ui.treeJSB.selectedItems()[0]
-        if selected.data(0, Qt.UserRole).toString():
-            print selected.data(0, Qt.UserRole).toString()
-#        else: print type(selected.data(0, Qt.UserRole))
+        role = str(selected.data(0, Qt.UserRole).toString())
+        if role:
+            editors = {
+                'projectName': lambda: self._edit_textfield('projectName'),
+                'licenseText': lambda: self._edit_textfield('licenseText'),
+                'deployDir': lambda: self._edit_textfield('deployDir'),
+            }
+            editor = editors.get(role, self._clear_form)
+            if editor:
+                editor()
+        else:
+            self._clear_form()
 
-        if not hasattr(self.ui, 'label22'):
-            self.ui.label22 = QLabel(self.ui.layoutWidget1)
-            self.ui.label22.setText(QApplication.translate("MainWindow", \
-                "TextLabel", None, QApplication.UnicodeUTF8))
-            self.ui.label22.setObjectName("label")
-            self.ui.formLayout.setWidget(2, QFormLayout.LabelRole, \
-                self.ui.label22)
-            self.ui.lineEdit22 = QLineEdit(self.ui.layoutWidget1)
-            self.ui.lineEdit22.setObjectName("lineEdit")
-            self.ui.formLayout.setWidget(2, QFormLayout.FieldRole, \
-                self.ui.lineEdit22)
+    def _clear_form(self):
+        form = self.ui.formLayout
+        while form.count() > 0:
+            item = form.takeAt(0)
+            if not item:
+                continue
+            w = item.widget()
+            if w:
+                w.deleteLater()
+
+    def _edit_textfield(self, label=None):
+        self._clear_form()
+
+        self.ui.label22 = QLabel(self.ui.layoutWidget1)
+        self.ui.label22.setText(QApplication.translate("MainWindow", \
+            label or 'Value', None, QApplication.UnicodeUTF8))
+        self.ui.label22.setObjectName("label")
+
+        self.ui.formLayout.setWidget(2, QFormLayout.LabelRole, self.ui.label22)
+
+        self.ui.lineEdit22 = QLineEdit(self.ui.layoutWidget1)
+        self.ui.lineEdit22.setObjectName("lineEdit")
+        self.ui.lineEdit22.returnPressed.connect(self.ui.buttonBox.accepted)
+
+        self.ui.buttonBox.accepted.connect(
+            lambda edit=self.ui.lineEdit22,
+                   item=self.ui.treeJSB.selectedItems()[0]:
+                       self._set_text(edit, item)
+        )
+
+        self.ui.formLayout.setWidget(2, QFormLayout.FieldRole, \
+            self.ui.lineEdit22)
+
+    def _set_text(self, edit=None, item=None):
+        item.setData(1, Qt.DisplayRole, edit.text())
 
     def _new_tree_item(self, key, value=None, user_data=None):
         item = QTreeWidgetItem([key, value])

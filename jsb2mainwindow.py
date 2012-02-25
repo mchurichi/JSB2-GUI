@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'jsb2mainwindow.ui'
 #
-# Created: Fri Feb 24 14:59:46 2012
+# Created: Fri Feb 24 19:25:14 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -71,10 +71,25 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.layoutWidget1 = QtGui.QWidget(self.splitter)
         self.layoutWidget1.setObjectName(_fromUtf8("layoutWidget1"))
-        self.formLayout = QtGui.QFormLayout(self.layoutWidget1)
+        self.verticalLayout_3 = QtGui.QVBoxLayout(self.layoutWidget1)
+        self.verticalLayout_3.setMargin(0)
+        self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
+        self.formLayout = QtGui.QFormLayout()
         self.formLayout.setFieldGrowthPolicy(QtGui.QFormLayout.AllNonFixedFieldsGrow)
-        self.formLayout.setMargin(0)
         self.formLayout.setObjectName(_fromUtf8("formLayout"))
+        self.verticalLayout_3.addLayout(self.formLayout)
+        self.horizontalLayout = QtGui.QHBoxLayout()
+        self.horizontalLayout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+        self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
+        spacerItem1 = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
+        self.buttonBox = QtGui.QDialogButtonBox(self.layoutWidget1)
+        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
+        self.buttonBox.setStandardButtons(QtGui.QDialogButtonBox.Cancel|QtGui.QDialogButtonBox.Ok)
+        self.buttonBox.setCenterButtons(True)
+        self.buttonBox.setObjectName(_fromUtf8("buttonBox"))
+        self.horizontalLayout.addWidget(self.buttonBox)
+        self.verticalLayout_3.addLayout(self.horizontalLayout)
         self.textConsole = QtGui.QPlainTextEdit(self.splitter_2)
         self.textConsole.setBaseSize(QtCore.QSize(0, 200))
         font = QtGui.QFont()
