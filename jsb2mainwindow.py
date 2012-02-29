@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'jsb2mainwindow.ui'
 #
-# Created: Fri Feb 24 19:25:14 2012
+# Created: Tue Feb 28 23:30:08 2012
 #      by: PyQt4 UI code generator 4.8.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -74,10 +74,13 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.layoutWidget1)
         self.verticalLayout_3.setMargin(0)
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
-        self.formLayout = QtGui.QFormLayout()
-        self.formLayout.setFieldGrowthPolicy(QtGui.QFormLayout.AllNonFixedFieldsGrow)
-        self.formLayout.setObjectName(_fromUtf8("formLayout"))
-        self.verticalLayout_3.addLayout(self.formLayout)
+        self.twEditors = QtGui.QTableWidget(self.layoutWidget1)
+        self.twEditors.setObjectName(_fromUtf8("twEditors"))
+        self.twEditors.setColumnCount(0)
+        self.twEditors.setRowCount(0)
+        self.twEditors.horizontalHeader().setVisible(False)
+        self.twEditors.horizontalHeader().setStretchLastSection(True)
+        self.verticalLayout_3.addWidget(self.twEditors)
         self.horizontalLayout = QtGui.QHBoxLayout()
         self.horizontalLayout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
@@ -91,7 +94,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.buttonBox)
         self.verticalLayout_3.addLayout(self.horizontalLayout)
         self.textConsole = QtGui.QPlainTextEdit(self.splitter_2)
-        self.textConsole.setBaseSize(QtCore.QSize(0, 200))
+        self.textConsole.setMaximumSize(QtCore.QSize(16777215, 100))
         font = QtGui.QFont()
         font.setFamily(_fromUtf8("Courier New"))
         font.setPointSize(9)
