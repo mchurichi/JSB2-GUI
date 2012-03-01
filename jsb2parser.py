@@ -30,7 +30,7 @@ class JSB2Parser:
                 u'licenseText')
         ]
         # Packages
-        pkgs = QTreeWidgetItem([u'pkgs', u'[%i packages]' % len(js['pkgs'])])
+        pkgs = self.new_tree_item(u'pkgs', u'[%i packages]' % len(js['pkgs']))
         for pkg in js['pkgs']:
             child_pkg = self.new_tree_item(pkg['name'], pkg['name'],
                 'packageDescriptor')
@@ -49,7 +49,7 @@ class JSB2Parser:
             # Dependencies
             if 'pkgDeps' in pkg:
                 num_deps = u'[%i dependencies]' % len(pkg['pkgDeps'])
-                pkg_deps = QTreeWidgetItem([u'pkgDeps', num_deps])
+                pkg_deps = self.new_tree_item(u'pkgDeps', num_deps)
                 for dep in pkg['pkgDeps']:
                     pkg_deps.addChild(self.new_tree_item(dep,
                         user_data='pkgDeps'))
@@ -73,7 +73,7 @@ class JSB2Parser:
 
         # Top level key Resources
         num_res = u'[%i resources]' % len(js['resources'])
-        resources = QTreeWidgetItem([u'resources', num_res])
+        resources = self.new_tree_item(u'resources', num_res)
         for res in js['resources']:
             child_r = (self.new_tree_item(res['src'],
                 user_data='resourceDescriptor'))

@@ -13,7 +13,7 @@ class JSB2_GUI(QMainWindow):
 
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
-        self.ui = uic.loadUi("jsb2mainwindow.ui", self)
+        self.ui = uic.loadUi('jsb2mainwindow.ui', self)
 
         self.ui.treeJSB.itemSelectionChanged.connect(self.selected)
         self.ui.buttonBox.accepted.connect(self.commit_data)
@@ -34,16 +34,21 @@ class JSB2_GUI(QMainWindow):
         data = {}
         for i in range(self.ui.twEditors.rowCount()):
             item = tw.item(i, 0)
-            key = tw.verticalHeaderItem(i).text()
-            value = item.text()
+            key = unicode(tw.verticalHeaderItem(i).text())
+            value = unicode(item.text())
             # TODO: ver como carajo saber si un item del tablewidget es
             # checkeable para poder sacar su estado y setearlo en el arbol
-            print bool(item.flags() & Qt.ItemIsUserCheckable)
+#            print bool(item.flags() & Qt.ItemIsUserCheckable)
             data[key] = value
             # TODO: mapear data a los hijos del item del arbol
 
         # Obtengo los hijos en el arbol
         childrens = [selected.child(i) for i in range(selected.childCount())]
+        for ch in childrens:
+#            print ch.data(0, Qt.DisplayRole).toString()
+            if ch.childCount() == 0:
+                key = unicode(ch.data(0, Qt.DisplayRole).toString())
+                ch.setData(1, Qt.DisplayRole, data[key])
 
     def rollback_data(self):
         print 'rollback'
@@ -69,6 +74,7 @@ class JSB2_GUI(QMainWindow):
                 'fileDescriptor': self.edit_childtextfield,
                 'resourceDescriptor': self.edit_childtextfield,
                 'pkgDeps': self.edit_childtextfield,
+
                 'simpletext': self.edit_simpletextfield,
                 'checkbox': self.edit_checkbox
             }
@@ -95,7 +101,7 @@ class JSB2_GUI(QMainWindow):
         checkbox = QTableWidgetItem()
         checkbox.setFlags(checkbox.flags() | Qt.ItemIsUserCheckable)
         checked = selected.data(1, Qt.DisplayRole).toString() == 'True'
-        checkbox.setCheckState(checked)
+        checkbox.setCheckState(Qt.Checked if checked else Qt.Unchecked)
         self.ui.twEditors.setItem(0, 0, checkbox)
 
     def edit_childtextfield(self, label=None):
@@ -116,10 +122,8 @@ class JSB2_GUI(QMainWindow):
             if ch.childCount() == 0:
                 if ch.data(0, Qt.UserRole).toString() == 'checkbox':
                     item = QTableWidgetItem()
-                    if ch.data(1, Qt.DisplayRole).toString() == 'True':
-                        item.setCheckState(Qt.Checked)
-                    else:
-                        item.setCheckState(Qt.Unchecked)
+                    checked = ch.data(1, Qt.DisplayRole).toString() == 'True'
+                    item.setCheckState(Qt.Checked if checked else Qt.Unchecked)
                 else:
                     item = QTableWidgetItem(value)
             else:
