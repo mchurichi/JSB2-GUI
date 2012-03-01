@@ -3,34 +3,62 @@
 
 import sys
 import json
-from PyQt4.QtCore import pyqtSlot
-from PyQt4.QtGui import (QApplication, QMainWindow, QWidget, QTreeWidgetItem,
-    QFileDialog, QTableWidgetItem)
-from PyQt4.QtCore import Qt, QStringList
-from jsb2mainwindow import Ui_MainWindow
+from PyQt4 import uic
+from PyQt4.QtGui import QApplication, QMainWindow, QFileDialog, QTableWidgetItem
+from jsb2parser import JSB2Parser
+from PyQt4.QtCore import Qt, pyqtSlot, QStringList
 
 
 class JSB2_GUI(QMainWindow):
 
     def __init__(self, parent=None):
-        QWidget.__init__(self, parent)
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
+        QMainWindow.__init__(self, parent)
+        self.ui = uic.loadUi("jsb2mainwindow.ui", self)
+
         self.ui.treeJSB.itemSelectionChanged.connect(self.selected)
         self.ui.buttonBox.accepted.connect(self.commit_data)
         self.ui.buttonBox.rejected.connect(self.rollback_data)
 
     def commit_data(self):
+        selected = self.get_selected()
+        if not selected:
+            return
+        tw = self.ui.twEditors
+        # Si es una una fila, seteo y salgo
+        if tw.rowCount() == 1:
+            self.ui.treeJSB.selectedItems()[0].setData(1, Qt.DisplayRole,
+                tw.item(0, 0).text())
+            return
+
+        # Obtengo los campos del editor
+        data = {}
         for i in range(self.ui.twEditors.rowCount()):
-            value = self.ui.twEditors.item(0, 0).text()
-            self.ui.treeJSB.selectedItems()[0].setData(1, Qt.DisplayRole, value)
-#            print self.ui.twEditors.item(i, 0).text()
+            item = tw.item(i, 0)
+            key = tw.verticalHeaderItem(i).text()
+            value = item.text()
+            # TODO: ver como carajo saber si un item del tablewidget es
+            # checkeable para poder sacar su estado y setearlo en el arbol
+            print bool(item.flags() & Qt.ItemIsUserCheckable)
+            data[key] = value
+            # TODO: mapear data a los hijos del item del arbol
+
+        # Obtengo los hijos en el arbol
+        childrens = [selected.child(i) for i in range(selected.childCount())]
 
     def rollback_data(self):
         print 'rollback'
 
+    def get_selected(self):
+        selected = self.ui.treeJSB.selectedItems()
+        if selected:
+            return selected[0]
+        else:
+            return None
+
     def selected(self):
-        selected = self.ui.treeJSB.selectedItems()[0]
+        selected = self.get_selected()
+        if not selected:
+            return
         role = unicode(selected.data(0, Qt.UserRole).toString())
         if role:
             editors = {
@@ -54,7 +82,9 @@ class JSB2_GUI(QMainWindow):
         self.ui.twEditors.clearContents()
 
     def edit_checkbox(self, label=None):
-        selected = self.ui.treeJSB.selectedItems()[0]
+        selected = self.get_selected()
+        if not selected:
+            return
         if not label:
             label = selected.data(0, Qt.DisplayRole).toString()
         self.clear_table()
@@ -63,14 +93,15 @@ class JSB2_GUI(QMainWindow):
         self.ui.twEditors.setVerticalHeaderLabels(QStringList(label))
 
         checkbox = QTableWidgetItem()
-        if selected.data(1, Qt.DisplayRole).toString() == 'True':
-            checkbox.setCheckState(Qt.Checked)
-        else:
-            checkbox.setCheckState(Qt.Unchecked)
+        checkbox.setFlags(checkbox.flags() | Qt.ItemIsUserCheckable)
+        checked = selected.data(1, Qt.DisplayRole).toString() == 'True'
+        checkbox.setCheckState(checked)
         self.ui.twEditors.setItem(0, 0, checkbox)
 
     def edit_childtextfield(self, label=None):
-        selected = self.ui.treeJSB.selectedItems()[0]
+        selected = self.get_selected()
+        if not selected:
+            return
         self.clear_table()
         self.ui.twEditors.setRowCount(0)
         self.ui.twEditors.setColumnCount(1)
@@ -99,7 +130,9 @@ class JSB2_GUI(QMainWindow):
         tw.setVerticalHeaderLabels(QStringList(row_labels))
 
     def edit_simpletextfield(self, label=None):
-        selected = self.ui.treeJSB.selectedItems()[0]
+        selected = self.get_selected()
+        if not selected:
+            return
         if not label:
             label = selected.data(0, Qt.DisplayRole).toString()
         self.clear_table()
@@ -112,18 +145,6 @@ class JSB2_GUI(QMainWindow):
                 Qt.DisplayRole).toString()
             ))
 
-    def set_text(self, edit=None, item=None):
-        item.setData(1, Qt.DisplayRole, edit.text())
-
-    def new_tree_item(self, key, value=None, user_data=None):
-        data = [key]
-        if value:
-            data.append(value)
-        item = QTreeWidgetItem(data)
-        if user_data:
-            item.setData(0, Qt.UserRole, user_data)
-        return item
-
     #TODO: remove file_name argument
     @pyqtSlot('bool')
     def on_action_Open_triggered(self, file_name=None):
@@ -135,80 +156,10 @@ class JSB2_GUI(QMainWindow):
             json_file = f.read()
             jsb2 = json.loads(json_file)
             self.ui.treeJSB.clear()
-            self.read_jsb2(jsb2)
+            jsb2parser = JSB2Parser(jsb2)
+            self.ui.treeJSB.addTopLevelItems(jsb2parser.json)
             self.ui.textConsole.appendPlainText(u'Loaded project "%s" from %s'
                  % (jsb2['projectName'], file_name))
-
-    def read_jsb2(self, js):
-        # Top leves keys
-        items = [
-            self.new_tree_item(u'projectName', js['projectName'],
-                u'projectName'),
-            self.new_tree_item(u'deployDir', js['deployDir'],
-                u'deployDir'),
-            self.new_tree_item(u'licenseText', js['licenseText'],
-                u'licenseText')
-        ]
-        # Packages
-        pkgs = QTreeWidgetItem([u'pkgs', u'[%i packages]' % len(js['pkgs'])])
-        for pkg in js['pkgs']:
-            child_pkg = self.new_tree_item(pkg['name'], pkg['name'],
-                'packageDescriptor')
-            child_pkg.addChild(self.new_tree_item(u'name', pkg['name'],
-                'simpletext'))
-            child_pkg.addChild(self.new_tree_item(u'file', pkg['file'],
-                'simpletext'))
-            if 'isDebug' in pkg:
-                isdebug = unicode(pkg['isDebug'])
-                child_pkg.addChild(self.new_tree_item(u'isDebug', isdebug,
-                    'checkbox'))
-            if 'includeDeps' in pkg:
-                ideps = unicode(pkg['includeDeps'])
-                child_pkg.addChild(self.new_tree_item(u'includeDeps', ideps,
-                    'checkbox'))
-            # Dependencies
-            if 'pkgDeps' in pkg:
-                num_deps = u'[%i dependencies]' % len(pkg['pkgDeps'])
-                pkg_deps = QTreeWidgetItem([u'pkgDeps', num_deps])
-                for dep in pkg['pkgDeps']:
-                    pkg_deps.addChild(self.new_tree_item(dep,
-                        user_data='pkgDeps'))
-                child_pkg.addChild(pkg_deps)
-            # Files included
-            num_files = u'[%i files]' % len(pkg['fileIncludes'])
-            fileIncludes = self.new_tree_item(u'fileIncludes', num_files)
-            for file in pkg['fileIncludes']:
-                child_f = self.new_tree_item(file['text'],
-                    user_data='fileDescriptor')
-                child_f.addChild(self.new_tree_item(u'text', file['text'],
-                    'simpletext'))
-                child_f.addChild(self.new_tree_item(u'path', file['path'],
-                    'simpletext'))
-                fileIncludes.addChild(child_f)
-            child_pkg.addChild(fileIncludes)
-            # Add package
-            pkgs.addChild(child_pkg)
-        # Add all packages
-        items.append(pkgs)
-
-        # Top level key Resources
-        num_res = u'[%i resources]' % len(js['resources'])
-        resources = QTreeWidgetItem([u'resources', num_res])
-        for res in js['resources']:
-            child_r = (self.new_tree_item(res['src'],
-                user_data='resourceDescriptor'))
-            child_r.addChild(self.new_tree_item(u'src', res['src'],
-                'simpletext'))
-            child_r.addChild(self.new_tree_item(u'dest', res['dest'],
-                'simpletext'))
-            child_r.addChild(self.new_tree_item(u'filters', res['filters'],
-                'simpletext'))
-            resources.addChild(child_r)
-        # Add resource
-        items.append(resources)
-
-        # Add all top level keys
-        self.ui.treeJSB.addTopLevelItems(items)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
