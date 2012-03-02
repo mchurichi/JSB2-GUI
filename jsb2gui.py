@@ -44,7 +44,7 @@ class JSB2_GUI(QMainWindow):
         # Si es una una fila, seteo y salgo
         if tw.rowCount() == 1:
             value = self.get_edit_value(tw.item(0, 0))
-            self.ui.treeJSB.selectedItems()[0].setData(1, Qt.DisplayRole, value)
+            selected.setData(1, Qt.DisplayRole, value)
             return
 
         # Obtengo los campos del editor
@@ -165,9 +165,7 @@ class JSB2_GUI(QMainWindow):
         self.ui.twEditors.setHorizontalHeaderLabels(QStringList(['Value']))
         self.ui.twEditors.setVerticalHeaderLabels(QStringList([label]))
         self.ui.twEditors.setItem(0, 0, QTableWidgetItem(
-            self.ui.treeJSB.selectedItems()[0].data(1,
-                Qt.DisplayRole).toString()
-            ))
+            selected.data(1, Qt.DisplayRole).toString()))
 
     #TODO: remove file_name argument
     @pyqtSlot('bool')
