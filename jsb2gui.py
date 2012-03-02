@@ -1,12 +1,29 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 *-*
 
+#    Copyright © 2012 Maximiliano Gabriel Churichi <mchurichi AT gmail DOT com>
+
+#    This file is part of JSB2 GUI.
+#
+#    JSB2 GUI is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    JSB2 GUI is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with SB2 GUI.  If not, see <http://www.gnu.org/licenses/>.
+
 import sys
 import json
 from PyQt4 import uic
+from PyQt4.QtCore import Qt, pyqtSlot, QStringList
 from PyQt4.QtGui import QApplication, QMainWindow, QFileDialog, QTableWidgetItem
 from jsb2parser import JSB2Parser
-from PyQt4.QtCore import Qt, pyqtSlot, QStringList
 
 
 class JSB2_GUI(QMainWindow):
@@ -35,17 +52,18 @@ class JSB2_GUI(QMainWindow):
         for i in range(self.ui.twEditors.rowCount()):
             item = tw.item(i, 0)
             key = unicode(tw.verticalHeaderItem(i).text())
-            value = unicode(item.text())
-            # TODO: ver como carajo saber si un item del tablewidget es
-            # checkeable para poder sacar su estado y setearlo en el arbol
-#            print bool(item.flags() & Qt.ItemIsUserCheckable)
+            # its checkable?
+            if not item.data(Qt.EditRole).toBool():
+                value = 'True' if item.checkState() == Qt.Checked else 'False'
+            else:
+                value = unicode(item.text())
             data[key] = value
             # TODO: mapear data a los hijos del item del arbol
 
-        # Obtengo los hijos en el arbol
+        # Obtengo los hijos en el arbol y seteo sus nuevos valores
         childrens = [selected.child(i) for i in range(selected.childCount())]
         for ch in childrens:
-#            print ch.data(0, Qt.DisplayRole).toString()
+            # TODO: ver como setear la descripcion para los nodos con hijos
             if ch.childCount() == 0:
                 key = unicode(ch.data(0, Qt.DisplayRole).toString())
                 ch.setData(1, Qt.DisplayRole, data[key])

@@ -2,8 +2,8 @@
   "mainFile": "jsb2gui.py", 
   "venv": "", 
   "name": "JSB2 GUI", 
-  "license": "", 
-  "url": "", 
+  "license": "GNU General Public License v3", 
+  "url": "https://github.com/mchurichi/JSB2-GUI", 
   "pythonPath": "python", 
   "preExecScript": "", 
   "programParams": "", 
@@ -20,5 +20,5 @@
   ], 
   "project-type": "", 
   "postExecScript": "", 
-  "description": ""
+  "description": "A tool for creating and editing Sencha JSBuilder2 configuration files"
 }

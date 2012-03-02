@@ -1,5 +1,26 @@
-=====================================
-JSB2 GUI 
-=====================================
+================================================================================
+JSB2 GUI
+================================================================================
 
-A Sencha JSBuilder2 GUI
+Copyright © 2012 Maximiliano Gabriel Churichi <mchurichi AT gmail DOT com>
+
+
+================================================================================
+ABOUT
+================================================================================
+
+JSB2 GUI is a cross-platform graphical tool for view, create and edit Sencha
+JSBuilder 2 configuration files (.jsb2)
+
+Sencha JSBuilder2 is a JavaScript and CSS project build tool
+For additional information, see http://extjs.com/products/jsbuilder/
+
+
+================================================================================
+CONTACT
+================================================================================
+
+HOMEPAGE: https://github.com/mchurichi/JSB2-GUI
+
+CONTACT: mchurichi AT gmail DOT com
+
