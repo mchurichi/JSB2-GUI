@@ -43,8 +43,8 @@ class JSB2_GUI(QMainWindow):
         tw = self.ui.twEditors
         # Si es una una fila, seteo y salgo
         if tw.rowCount() == 1:
-            self.ui.treeJSB.selectedItems()[0].setData(1, Qt.DisplayRole,
-                tw.item(0, 0).text())
+            value = self.get_edit_value(tw.item(0, 0))
+            self.ui.treeJSB.selectedItems()[0].setData(1, Qt.DisplayRole, value)
             return
 
         # Obtengo los campos del editor
@@ -53,11 +53,7 @@ class JSB2_GUI(QMainWindow):
             item = tw.item(i, 0)
             key = unicode(tw.verticalHeaderItem(i).text())
             # its checkable?
-            if not item.data(Qt.EditRole).toBool():
-                value = 'True' if item.checkState() == Qt.Checked else 'False'
-            else:
-                value = unicode(item.text())
-            data[key] = value
+            data[key] = self.get_edit_value(item)
             # TODO: mapear data a los hijos del item del arbol
 
         # Obtengo los hijos en el arbol y seteo sus nuevos valores
@@ -70,13 +66,6 @@ class JSB2_GUI(QMainWindow):
 
     def rollback_data(self):
         print 'rollback'
-
-    def get_selected(self):
-        selected = self.ui.treeJSB.selectedItems()
-        if selected:
-            return selected[0]
-        else:
-            return None
 
     def selected(self):
         selected = self.get_selected()
@@ -99,6 +88,19 @@ class JSB2_GUI(QMainWindow):
             editors.get(role, self.clear_table)()
         else:
             self.clear_table()
+
+    def get_selected(self):
+        selected = self.ui.treeJSB.selectedItems()
+        if selected:
+            return selected[0]
+        else:
+            return None
+
+    def get_edit_value(self, widget):
+        if not widget.data(Qt.EditRole).toBool():
+            return 'True' if widget.checkState() == Qt.Checked else 'False'
+        else:
+            return unicode(widget.text())
 
     def clear_table(self):
         self.ui.twEditors.setRowCount(0)
@@ -188,5 +190,5 @@ if __name__ == '__main__':
     main_window = JSB2_GUI()
     main_window.show()
     #TODO: Test only
-    main_window.on_action_Open_triggered('/home/churi/python/JSB2-GUI/ext.jsb2')
+    main_window.on_action_Open_triggered('ext.jsb2')
     sys.exit(app.exec_())
